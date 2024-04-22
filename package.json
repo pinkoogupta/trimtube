@@ -1,14 +1,14 @@
 {
-  "name": "project",
+  "name": "trimtube",
   "version": "1.0.0",
-  "description": "",
+  "description": "-[model link] (https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "javascript",
     "backend",
+    "javascript",
     "rishu"
   ],
   "author": "pinkoo",
