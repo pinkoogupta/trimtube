@@ -20,7 +20,8 @@ const response=await cloudinary.uploader.upload(localFilePath,{
 console.log("the file  has been uploaded successfully on cloudinary"
 ,response.url);
 return response;
-    }catch(error){
+
+}catch(error){
         fs.unlinkSync(localFilePath)// remove the locally saved temporary file 
         // as upload operation got failed
         return null;

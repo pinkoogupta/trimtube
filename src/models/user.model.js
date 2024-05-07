@@ -59,7 +59,7 @@ userSchema.pre("save", async function(next){
     //if we don't apply the if condition then it changes the hash code whenerver the user changes in any field it change the hash code of the password
     if(!this.isModified("password"))  return next();//the password needs to pass in the string 
   
-  else   this.password=bcrypt.hash(this.password,10)
+  else   this.password=await bcrypt.hash(this.password,10)
     next();
 })
 userSchema.methods.isPasswordCorrect=async function(password)
@@ -91,4 +91,4 @@ userSchema.methods.generateRefreshToken=function(){
 )
 }
 
-export const user=mongoose.model("User",UserSchema);
+export const User=mongoose.model("User",UserSchema);
