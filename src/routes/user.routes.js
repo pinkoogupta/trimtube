@@ -3,9 +3,7 @@ import {registerUser} from "../controllers/user.controller.js"
 import {upload} from "../middlewares/multer.middleware.js"
 
 
-
-
-const routes=Router()
+const routes=Router();
 
 
 routes.route("/register").post(
@@ -15,7 +13,7 @@ routes.route("/register").post(
             maxCount:1
         },
         {
-            name:"coverImage"
+            name:"coverImage",
             maxCount:1
         }
 

@@ -16,5 +16,3 @@ const connectDB = async () => {  //bd is on other continent
   }
 };
 export default connectDB;
-
-
