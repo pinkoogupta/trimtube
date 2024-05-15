@@ -83,12 +83,11 @@ const registerUser = asyncHandler( async (req, res) => {
     return res.status(201).json(
         new apiResponse(200, createdUser, "User registered Successfully")
     )
-
 } )
 
 
 
-const loginUser=asyncHandler(async(req,res,)=>{
+ const loginUser=asyncHandler(async(req,res,)=>{
 //1.req body->>data
 //2.check input username or email
 //3.find the user
@@ -241,9 +240,140 @@ const refreshAccessToken=asyncHandler(async(req,res)=>{
 
 })
 
+
+const changeCurrentPassword=asyncHandler(async(req,res)=>{
+    const {oldPassword,newPassword,confPassword}=req.body
+   
+
+    if(!(newPassword===confPassword)){
+        throw new apiError(400,"enter the same password");
+    }
+    // which user is changing the password
+    const user=await User.findById(req.user?._id)
+
+    // compare the old password with the new password
+    const isPasswordCorrect=await user.isPasswordCorrect(oldPassword)
+    if(!isPasswordCorrect){
+        throw new apiError(400,"invalid old password");
+    }
+
+
+    // if correct then add the new password in the place of old password
+    user.password=newPassword
+    
+    
+    // save the new password 
+    await user.save({validateBeforeSave:false})
+
+    return res
+    .status(200)
+    .json(new apiResponse(200),{},"password changed successfully")
+
+
+
+
+
+})
+
+
+const getCurrentUser=asyncHandler(async(req,res)=>
+{
+    return res
+    .status(200)
+    .json(200,req.user,"current user fetched successfully")
+})
+
+const updateAccountDetails=asyncHandler(async(req,res)=>{
+    const {fullName,email}=req.body
+    
+    
+    if(!fullName || !email){
+        throw new apiResponse(400,"all fields are required");
+    }
+
+    const user=User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                fullName,   // in es6 new method
+                email       // email:emailold method to set the value
+            }
+        },
+        {new:true}
+    ).select("-password")
+
+return res
+.status(200)
+.json(new apiResponse(200,user,"account details updated successfully"))
+})
+
+
+const updateUserAvatar=asyncHandler(async(req,res)=>
+{
+const avatarLocalPath=req.file?.path
+if(!avatarLocalPath){
+    throw new apiError(400,"avatar file is missing");
+}
+
+const avatar=await uploadOnCloudinary
+(avatarLocalPath)
+
+if(!avatar.url){
+    throw new apiError(400,"error while uploading avatar")
+}
+const user=  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+        $set:{
+            avatar:avatar.url
+        }
+    },
+    {new:true}
+  ).select("-password")
+  return 
+  res.
+  status(200).
+  json(new apiResponse(200,user,"avatar updated successfully"))
+
+})
+
+
+const updateUserCoverImage=asyncHandler(async(req,res)=>
+    {
+    const coverImageLocalPath=req.file?.path
+    if(!coverImageLocalPath){
+        throw new apiError(400,"coverImage file is missing");
+    }
+    
+    const coverImage=await uploadOnCloudinary
+    (coverImageLocalPath)
+    
+    if(!coverImage.url){
+        throw new apiError(400,"error while uploading avatar")
+    }
+    const user=  await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{
+                avatar:coverImage.url
+            }
+        },
+        {new:true}
+      ).select("-password")
+      return 
+      res
+      .status(200)
+      .json(new apiResponse(200,user,"avatar updated successfully"))
+    
+    })
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails,
+    updateUserAvatar,
+    updateUserCoverImage
 };
