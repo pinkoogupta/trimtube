@@ -1,17 +1,4 @@
- const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: "avatars",
-    width: 150,
-    crop: "scale",
-  });
-
-  const { name, email, password } = req.body;
-
-  const user = await User.create({
-    name,
-    email,
-    password,
-    avatar: {
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
-    },
-  });
+let user=[1,2,3,4,5,6,7,8,9];
+let id=4;
+user.splice(id,1);    ;
+console.log(user);
