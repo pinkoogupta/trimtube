@@ -194,7 +194,7 @@ const refreshAccessToken=asyncHandler(async(req,res)=>{
     .refreshToken || req.body.refreshToken //after OR is for moblie 
 
     //if token is not incoming 
-    if(incomingRefreshToken){
+    if(!incomingRefreshToken){
         throw new apiError(401,"unauthorized request");
     }
 
