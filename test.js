@@ -1,4 +1,19 @@
-let user=[1,2,3,4,5,6,7,8,9];
-let id=4;
-user.splice(id,1);    ;
-console.log(user);
+// use of aes
+
+
+import jose from "jose";
+
+// Generate encryption key
+const key = await jose.JWK.generate('oct', 256);
+
+// Encrypt JWT
+const jwt = 'your.jwt.token';
+const encryptedJWT = await new jose.EncryptJWT({ jwt })
+  .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+  .encrypt(key);
+
+// Decrypt JWT
+const decryptedJWT = await jose.jwtDecrypt(encryptedJWT, key);
+console.log(decryptedJWT);
+
+

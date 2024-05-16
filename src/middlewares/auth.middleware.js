@@ -8,7 +8,7 @@
    try {
      //for the access of  all the cookies
     const token= req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
-   console.log(token);
+  //  console.log(token);
     if(!token){
      throw new apiError(401,"unauthorized request")
     }

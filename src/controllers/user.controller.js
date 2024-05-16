@@ -99,7 +99,7 @@ const registerUser = asyncHandler( async (req, res) => {
 //1.req body->>data
 
 const {email,username,password}=req.body;
-console.log(email);
+// console.log(email);
 
 //2.username or email
 
@@ -120,7 +120,6 @@ const  user=await User.findOne({
 if(!user){
     throw new apiError(404,"user doesn't exist");
 }
-
 
 //4.password check
 const isPasswordValid=await user.isPasswordCorrect(password)
@@ -189,7 +188,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const refreshAccessToken=asyncHandler(async(req,res)=>{
     // access the the old token which is going to expire
-    const =incomingRefreshToken=req.cookies
+    const incomingRefreshToken=req.cookies
     .refreshToken || req.body.refreshToken //after OR is for moblie 
 
     //if token is not incoming 
@@ -217,7 +216,7 @@ const refreshAccessToken=asyncHandler(async(req,res)=>{
             httpOnly:true,
             secure:true
         }
-        const {accessToken,newrefreshToken}await generateAccessAndRefreshToken(user._id)
+        const {accessToken,newrefreshToken} = await generateAccessAndRefreshToken(user._id)
     
         return res
         .status(200)
@@ -244,7 +243,6 @@ const refreshAccessToken=asyncHandler(async(req,res)=>{
 const changeCurrentPassword=asyncHandler(async(req,res)=>{
     const {oldPassword,newPassword,confPassword}=req.body
    
-
     if(!(newPassword===confPassword)){
         throw new apiError(400,"enter the same password");
     }
@@ -259,7 +257,7 @@ const changeCurrentPassword=asyncHandler(async(req,res)=>{
 
 
     // if correct then add the new password in the place of old password
-    user.password=newPassword
+    user.password=newPassword;
     
     
     // save the new password 
@@ -278,25 +276,27 @@ const changeCurrentPassword=asyncHandler(async(req,res)=>{
 
 const getCurrentUser=asyncHandler(async(req,res)=>
 {
+    // console.log(req.user);
     return res
     .status(200)
     .json(200,req.user,"current user fetched successfully")
+    
 })
 
 const updateAccountDetails=asyncHandler(async(req,res)=>{
-    const {fullName,email}=req.body
+    const {fullName,email}=req.body;
     
     
     if(!fullName || !email){
         throw new apiResponse(400,"all fields are required");
     }
 
-    const user=User.findByIdAndUpdate(
+    const user=await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set:{
-                fullName,   // in es6 new method
-                email       // email:emailold method to set the value
+                fullName:fullName,   // in es6 new method
+                email:email       // email:emailold method to set the value
             }
         },
         {new:true}
