@@ -1,26 +1,20 @@
-
-class apiError extends Error{
-    constructor(
-        statusCode,
-        message= "Something went wrong",
-        errors =[],
-        stack=""
-    ){
-        super(message)
-        this.statusCode=statusCode
-        this.data=null
-        this.message=message
-        this.success=false;
-        this.errors=errors
-
-
-        if(stack){
-            this.stack=stack
-        }
-        else{
-            Error.captureStackTrace(this,this.constructor);
-        }
-
+export const apiError = (
+    res,
+    statusCode,
+    status,
+    message,
+    length = false
+  ) => {
+    if (length) {
+      return res.status(statusCode).json({
+        status,
+        message,
+       
+        
+      });
     }
-}
-export {apiError}
+    return res.status(statusCode).json({
+      status,
+      message,
+    });
+  };

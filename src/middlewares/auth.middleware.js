@@ -10,7 +10,8 @@
     const token= req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
   //  console.log(token);
     if(!token){
-     throw new apiError(401,"unauthorized request")
+     apiError(res,401,false,"unauthorized request");
+     return;
     }
   const decodedToken= jwt
     .verify(token,process.env.ACCESS_TOKEN_SECRET)
@@ -22,14 +23,16 @@
  
  if(!user){
      //todo: discuss about frontend
-     throw new apiError(401,"invalid access token");
+     apiError(res,401,false,"invalid access token");
+     return;
  }
 //  set the object user 
  req.user=user;
  next();
  
    } catch (error) {
-    throw new apiError(401,error?.message || "invalid access token")
+    apiError(res,401,false,error?.message || "invalid access token");
+    return;
    }
 
  });
