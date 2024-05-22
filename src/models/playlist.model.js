@@ -22,6 +22,6 @@ const playlistSchema=Schema({
 
     
 
-},timestapms:true)
+},{timestapms:true})
 
 export Playlist=mongoose.model("Playlist",playlistSchema);
